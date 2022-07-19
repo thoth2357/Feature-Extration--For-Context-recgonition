@@ -75,3 +75,21 @@ def std_deviation(ActivityData) -> Dict:
     return activity_features
 
 
+def root_ms(ActivityData) -> Dict:
+    """
+    purpose: function for computing the root mean square of each sensor readings
+    Argument: ActivityData
+    Return: activity_features populated with root mean square of each sensor readings
+    """
+    for keys in ActivityData:
+        rms_orientation = sum([x**2 for x in ActivityData[keys][:3]]) / len(ActivityData[keys][:3])
+        rms_rotation = sum([x**2 for x in ActivityData[keys][3:6]]) / len(ActivityData[keys][3:6])
+        rms_accelerometer = sum([x**2 for x in ActivityData[keys][6:9]]) / len(ActivityData[keys][6:9])
+        rms_gyroscope = sum([x**2 for x in ActivityData[keys][9:12]]) / len(ActivityData[keys][9:12])
+        rms_magnetic = sum([x**2 for x in ActivityData[keys][12:15]]) / len(ActivityData[keys][12:15])
+        
+        activity_features[keys].update({'id':keys, 'orRms':rms_orientation, 'rRms':rms_rotation, 'accRms':rms_accelerometer,
+        'gRms':rms_gyroscope,'MagRms':rms_magnetic,'Activity':ActivityData[keys][-1]})
+    return activity_features
+
+

@@ -93,3 +93,27 @@ def root_ms(ActivityData) -> Dict:
     return activity_features
 
 
+def sum_squares(ActivityData) -> dict:
+    """
+    purpose: function for computing the sum of square of each sensor readings'
+    Argument: ActivityData
+    Return: activity_features populated with root mean square of each sensor readings
+    """
+    for keys in ActivityData:
+        mean_orientation_Xi = sum(ActivityData[keys][:3]) / len(ActivityData[keys][:3])
+        mean_rotation_Xi = sum(ActivityData[keys][3:6]) / len(ActivityData[keys][3:6])
+        mean_accelerometer_Xi = sum(ActivityData[keys][6:9]) / len(ActivityData[keys][6:9])
+        mean_gyroscope_Xi = sum(ActivityData[keys][9:12]) / len(ActivityData[keys][9:12])
+        mean_magnetic_Xi = sum(ActivityData[keys][12:15]) / len(ActivityData[keys][12:15]) 
+        
+        sos_orientation = sum([(x - mean_orientation_Xi) **2 for x in ActivityData[keys][:3]])
+        sos_rotation = sum([(x - mean_rotation_Xi) **2 for x in ActivityData[keys][3:6]])
+        sos_accelerometer = sum([(x - mean_accelerometer_Xi) **2 for x in ActivityData[keys][6:9]]) 
+        sos_gyroscope = sum([(x - mean_gyroscope_Xi) **2 for x in ActivityData[keys][9:12]])
+        sos_magnetic = sum([(x - mean_magnetic_Xi) **2 for x in ActivityData[keys][12:15]])
+        
+        activity_features[keys].update({'id':keys, 'orSos':sos_orientation, 'rSos':sos_rotation, 'accSos':sos_accelerometer,
+        'gSos':sos_gyroscope,'MagSos':sos_magnetic,'Activity':ActivityData[keys][-1]})
+    return activity_features
+
+def median()

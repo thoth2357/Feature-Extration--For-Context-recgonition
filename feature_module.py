@@ -1,4 +1,5 @@
 import os
+from typing import Dict
 
 from sklearn import datasets
 import load_dataset_module
@@ -47,3 +48,30 @@ def variance(ActivityData) -> dict:
         activity_features[keys].update({'id':keys, 'orVar':var_orientation, 'rVar':var_rotation, 'accVar':var_accelerometer,
         'gVar':var_gyroscope,'MagVar':var_magnetic,'Activity':ActivityData[keys][-1]})
     return activity_features
+
+
+def std_deviation(ActivityData) -> Dict:
+    """
+    purpose:function for computing the standard deviation of each sensor readings
+    Argument: ActivityData
+    Return: activity_features populated with std_Deviation values of each sensor readings
+    """
+
+    for keys in ActivityData:    
+        mean_orientation_Xi = sum(ActivityData[keys][:3]) / len(ActivityData[keys][:3])
+        mean_rotation_Xi = sum(ActivityData[keys][3:6]) / len(ActivityData[keys][3:6])
+        mean_accelerometer_Xi = sum(ActivityData[keys][6:9]) / len(ActivityData[keys][6:9])
+        mean_gyroscope_Xi = sum(ActivityData[keys][9:12]) / len(ActivityData[keys][9:12])
+        mean_magnetic_Xi = sum(ActivityData[keys][12:15]) / len(ActivityData[keys][12:15]) 
+        
+        std_orientation = (sum([(x - mean_orientation_Xi) **2 for x in ActivityData[keys][:3]]) / len(ActivityData[keys][:3])) ** 0.5
+        std_rotation = (sum([(x - mean_rotation_Xi) **2 for x in ActivityData[keys][3:6]]) / len(ActivityData[keys][3:6])) ** 0.5
+        std_accelerometer = (sum([(x - mean_accelerometer_Xi) **2 for x in ActivityData[keys][6:9]]) / len(ActivityData[keys][6:9])) ** 0.5
+        std_gyroscope = (sum([(x - mean_gyroscope_Xi) **2 for x in ActivityData[keys][9:12]]) / len(ActivityData[keys][9:12])) ** 0.5
+        std_magnetic = (sum([(x - mean_magnetic_Xi) **2 for x in ActivityData[keys][12:15]]) / len(ActivityData[keys][12:15])) ** 0.5
+        
+        activity_features[keys].update({'id':keys, 'orStd':std_orientation, 'rStd':std_rotation, 'accStd':std_accelerometer,
+        'gStd':std_gyroscope,'MagStd':std_magnetic,'Activity':ActivityData[keys][-1]})
+    return activity_features
+
+

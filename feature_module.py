@@ -116,4 +116,28 @@ def sum_squares(ActivityData) -> dict:
         'gSos':sos_gyroscope,'MagSos':sos_magnetic,'Activity':ActivityData[keys][-1]})
     return activity_features
 
-def median()
+def median(ActivityData) -> dict:
+    """
+    purpose: function for computing the median of each sensor readings
+    Argument: ActivityData
+    Return: activity_features populated with root mean square of each sensor readings
+    """
+    # since our no of observations is an odd number
+    for keys in ActivityData:
+        #sorting respective featues in an ascending order
+        ActivityData[keys][:3].sort() #orientation
+        ActivityData[keys][3:6].sort() #rotation
+        ActivityData[keys][6:9].sort() #accelerometer
+        ActivityData[keys][9:12].sort() #gyroscope
+        ActivityData[keys][12:15].sort() #magnetic
+
+        med_orientation = ActivityData[keys][:3] [int(((len(ActivityData[keys][:3]) + 1) / 2)) -1  ]
+        med_rotation = ActivityData[keys][3:6] [int(((len(ActivityData[keys][3:6]) + 1) / 2)) -1 ]
+        med_accelerometer = ActivityData[keys][6:9] [int(((len(ActivityData[keys][6:9]) + 1) / 2)) -1 ]
+        med_gyroscope = ActivityData[keys][9:12] [int(((len(ActivityData[keys][9:12]) + 1) / 2)) -1 ]
+        med_magnetic = ActivityData[keys][12:15] [int(((len(ActivityData[keys][12:15]) + 1) / 2)) -1 ]
+        
+        activity_features[keys].update({'id':keys, 'orMedian':med_orientation, 'rMedian':med_rotation, 'accMedian':med_accelerometer,
+        'gMedian':med_gyroscope,'MagMedian':med_magnetic,'Activity':ActivityData[keys][-1]})
+    return activity_features
+

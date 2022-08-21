@@ -2,7 +2,7 @@
 import csv
 
 #open and read dataset into dictreader
-file = open('activity_dataset.csv', 'r', encoding='utf-8')
+file = open('activity_context_tracking_data.csv', 'r', encoding='utf-8')
 file_to_dict = csv.DictReader(file)
 
 
